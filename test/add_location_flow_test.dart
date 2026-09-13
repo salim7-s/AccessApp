@@ -47,20 +47,16 @@ Future<void> scrollUntilVisible(
 }
 
 void main() {
-  /// Onboard as PA Assisted + Can't See and land on the map.
+  /// Onboard with the Blind / Low Vision focus and land on the map.
   Future<AppState> onboard(WidgetTester tester) async {
     SharedPreferences.setMockInitialValues({});
     await tester.pumpWidget(const AccessMapApp());
     await settle(tester);
-    await tester.tap(find.text('PA Assisted'));
+    await tester.tap(find.text('Blind / Low Vision'));
     await tester.pump();
-    await tester.tap(find.text('Continue'));
-    await settle(tester);
-    await tester.tap(find.text("Can't See"));
+    await tester.ensureVisible(find.text('GET STARTED & EXPLORE MAP'));
     await tester.pump();
-    await tester.ensureVisible(find.text('Open Map'));
-    await tester.pump();
-    await tester.tap(find.text('Open Map'));
+    await tester.tap(find.text('GET STARTED & EXPLORE MAP'));
     // Bounded pumps: the map's tile layer retries failed (offline) requests
     // forever, so pumpAndSettle would never return here.
     await tester.pump(const Duration(milliseconds: 700));
@@ -68,11 +64,11 @@ void main() {
     return tester.element(find.byType(MaterialApp)).read<AppState>();
   }
 
-  /// Enter the Add Location wizard from the Contribute tab.
+  /// Enter the Add Location wizard from the Community (contributions) tab.
   Future<void> openWizard(WidgetTester tester) async {
     // Nav-bar icons are unique even though the IndexedStack keeps every
-    // tab's AppBar title alive (find.text('Contribute') would match twice).
-    await tester.tap(find.byIcon(Icons.volunteer_activism_outlined));
+    // tab's AppBar title alive (find.text('Community') would match twice).
+    await tester.tap(find.byIcon(Icons.people_alt_outlined));
     await settle(tester);
     await tester.tap(find.byKey(const ValueKey('add-location-card')));
     await settle(tester);
@@ -343,7 +339,7 @@ void main() {
         findsNothing);
 
     // Switch profile to wheelchair user → wheelchair line appears (#41).
-    state.updateDemoProfile(needs: [AccessibilityNeed.wheelchairUser]);
+    state.updateProfile(needs: [AccessibilityNeed.wheelchairMobility]);
     await settle(tester);
     expect(find.text('Wheelchair-Friendly - awaiting community ratings'),
         findsOneWidget);

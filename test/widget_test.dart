@@ -36,8 +36,10 @@ void main() {
     await tester.ensureVisible(ctaFinder);
     await tester.pumpAndSettle();
     await tester.tap(ctaFinder);
-    await tester.pumpAndSettle();
-    await tester.pump(const Duration(milliseconds: 500));
+    // Bounded pumps: the map's tile layer retries failed (offline) requests
+    // forever, so pumpAndSettle would never return after entering the map.
+    await tester.pump(const Duration(milliseconds: 700));
+    await tester.pump(const Duration(milliseconds: 400));
 
     expect(find.text('Map'), findsWidgets);
     expect(find.text('Search accessible places...'), findsOneWidget);

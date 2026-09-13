@@ -1,5 +1,4 @@
 import 'package:access_map/app/app_state.dart';
-import 'package:access_map/core/services/exploration_service.dart';
 import 'package:access_map/core/theme/app_theme.dart';
 import 'package:access_map/features/places/presentation/place_details_screen.dart';
 import 'package:access_map/shared/models/accessibility_need.dart';
@@ -29,7 +28,7 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
   @override
   Widget build(BuildContext context) {
     final state = context.watch<AppState>();
-    final exploration = context.watch<ExplorationService>();
+    final exploration = state.explorationService;
 
     // Exclude the place currently being navigated to
     final activeNavId = exploration.activeDestination?.id;
